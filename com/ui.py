@@ -39,7 +39,11 @@ class Window:
     @classmethod
     def Pack(cls,side = Tkconstants.TOP, fill = Tkconstants.NONE, expand = Tkconstants.NO, pady = 0, padx = 0, **kw):
         cls.widg.pack(side = side,fill = fill, expand = expand, pady = pady, padx = padx, **kw)
-
+    
+    @classmethod
+    def Grid(cls,row=0,column=0,sticky="", **kw):
+        cls.widg.grid(row = row, column = column, sticky = sticky, **kw)
+        
     @classmethod
     def Config(cls,**conf):
         keys = basic.get_configuration_keys(cls.widg)

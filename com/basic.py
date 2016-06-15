@@ -30,16 +30,18 @@ def get_pack_info(obj):
     '''
     if get_widget_ismapped(obj):
         return obj.pack_info()
-    
-
-def set_pack_conf(obj,**kw):
-    '''Usage:
-        set_pack_conf(button_obj,side = "bottom",fill = "x",)
-    '''
-    obj.pack(**kw)
-    
+      
 def del_current_pack(obj):
-    obj.pack_forget
+    obj.pack_forget()
+
+#### widget's Grid
+def get_grid_info(obj):
+    if get_widget_ismapped(obj):
+        return obj.grid_info()
+
+def del_current_grid(obj):
+    obj.grid_forget() 
+
 
 #### widget's Misc
 # These used to be defined in Widget:
