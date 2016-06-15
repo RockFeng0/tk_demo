@@ -19,8 +19,8 @@ UI and Web Http automation frame for python.
 '''
 
 from com import basic
-from com.basic import MSG
-from com.ui import Window,Widget,Tkconstants,TOP
+from com.basic import MSG,FileDilog
+from com.ui import Window,Widget,Tkconstants,ROOT
 
 g = {
      "list1_var":None,
@@ -172,11 +172,12 @@ g = {
      }
 
 
-Window.widg = TOP
+Window.widg = ROOT
 Window.Top("Demo tk",resizable_x = 1, resizable_y = 1)
 
-frame1 = Widget.Labelframe(TOP)
-frame2 = Widget.Labelframe(TOP)
+frame1 = Widget.Labelframe(ROOT)
+frame2 = Widget.Labelframe(ROOT)
+
 
 text1 = Widget.Text(frame1)
 text2 = Widget.Text(frame1)
@@ -184,37 +185,13 @@ text2 = Widget.Text(frame1)
 list1 = Widget.Listbox(frame2)
 x_scroll_1 = Widget.Scrollbar(frame2)
 y_scroll_1 = Widget.Scrollbar(frame2)    
+   
 
-menu0 = Widget.Menu(TOP)
-TOP.config(menu = menu0)
+menu0 = Widget.Menu(ROOT)
+ROOT.config(menu = menu0)
+ROOT.option_add("*Menu.tearOff", 0)
 menu_objs = {}
-
-def get_menu_bar():
-    menu_tree = [
-            {u"运行": [u"停止",u"选中运行",u"全部运行"]},
-            {u"报告": [u"查看报告",u"邮件发送报告"]},
-            {u"关于": u"版本信息"}
-        ]
-    Widget.GenerateMenu(menu0, menu_tree, menu_objs)
-    
-    def test_function(*args):
-        msg="oh,you are too handsome.\n"
-        for i in args:
-            msg = msg + " " + str(i)
-        MSG.Showinfo("Hi My Demo", msg)
         
-    node = menu_objs.get(u"关于")
-    Widget.RegisterMenu(node, u"版本信息", test_function, u"It's a demo usage of my Tkinter packages.\n -Bruce Luo(罗科峰)")
-    
-    node = menu_objs.get(u"运行")
-    Widget.RegisterMenu(node, u"停止", test_function, u"clicked 停止")
-    Widget.RegisterMenu(node, u"选中运行", test_function, u"clicked 选中运行")
-    Widget.RegisterMenu(node, u"全部运行", test_function, u"clicked 全部运行")
-    
-    node = menu_objs.get(u"报告")
-    Widget.RegisterMenu(node, u"查看报告", test_function, u"clicked 查看报告")
-    Widget.RegisterMenu(node, u"邮件发送报告", test_function, u"clicked 邮件发送报告")
-
 def set_selection(event):
     global g
     
@@ -266,52 +243,129 @@ def set_textkey(event):
         text1.insert("end",filler)
     
 ####  UI construction
-def get_menubar():
-    pass
+class Main():
+    def __init__(self):
+        self.__main()        
+        basic.mainloop(ROOT, True)
+    
+    def __main(self):
+        self.__get_menu_bar()
+        self.__get_frame1()
+        self.__get_frame2()
+        
+    
+    def __get_menu_bar(self):    
+        menu_tree = [
+                {u"文件": [u"打开",u"偏好设置"]},
+                {u"运行": [u"停止",u"选中运行",u"全部运行"]},
+                {u"报告": [u"查看报告",u"邮件发送报告"]},
+                {u"关于": u"版本信息"}
+            ]
+        Widget.GenerateMenu(menu0, menu_tree, menu_objs)
+        
+        def test_function(*args):
+            msg="oh,you are too handsome.\n"
+            for i in args:
+                msg = msg + " " + str(i)
+            MSG.Showinfo("Hi My Demo", msg)
+            
+        def pop_ui(*args):
+            Preference()
+        
+        node = menu_objs.get(u"关于")
+        Widget.RegisterMenu(node, u"版本信息", test_function, u"It's a demo usage of my Tkinter packages.\n -Bruce Luo(罗科峰)")
+        
+        node = menu_objs.get(u"运行")
+        Widget.RegisterMenu(node, u"停止", test_function, u"clicked 停止")
+        Widget.RegisterMenu(node, u"选中运行", test_function, u"clicked 选中运行")
+        Widget.RegisterMenu(node, u"全部运行", test_function, u"clicked 全部运行")
+        
+        node = menu_objs.get(u"报告")
+        Widget.RegisterMenu(node, u"查看报告", test_function, u"clicked 查看报告")
+        Widget.RegisterMenu(node, u"邮件发送报告", test_function, u"clicked 邮件发送报告")
+        
+        node = menu_objs.get(u"文件")
+        Widget.RegisterMenu(node, u"打开", test_function, u"clicked 打开")
+        Widget.RegisterMenu(node, u"偏好设置", pop_ui)
+        
+    def __get_frame1(self):    
+        # text1.window_create("end", window = list1)
+        # print basic.get_configuration_keys(frame1)    
+    
+        text1.insert(0.0, "switch to client automation")
+        Window.widg = text1
+        Window.Pack(expand = "yes", fill = "both", pady = 2, padx = "2m")
+        Window.Config(width = 88,height = 10)
+        Window.Bind('<Key>',set_selection)
+        Window.Bind('<Key-Return>',set_textformatter)
+        Window.Bind('<Key-Tab>',set_textkey)    
+        
+        Window.widg = text2
+        Window.Pack(expand = "yes", fill = "both", pady = 2, padx = "2m")
+        Window.Config(width = 88,height = 10)
+        
+        Window.widg = frame1
+        Window.Pack(expand = "yes", side = "left", fill = "both", pady = 2, padx = "2m")
+        Window.Config(text = "frame1")
+    
+    def __get_frame2(self):
+        global g
+        Window.widg = x_scroll_1
+        Window.Config(orient = "horizontal", command= list1.xview)
+        Window.Pack(side = "bottom", fill = "x")
+        
+        Window.widg = y_scroll_1
+        Window.Config(orient = "vertical", command= list1.yview)
+        Window.Pack(side = "right", fill = "y")
+        
+        Window.widg = list1
+        Window.Config(selectmode = Tkconstants.SINGLE, xscrollcommand = x_scroll_1.set, yscrollcommand = y_scroll_1.set)
+        g["list1_var"] = Window.ConfigVar("listvariable")
+        Window.Pack(expand = "yes", fill = "both")
+        
+        Window.widg = frame2
+        Window.Pack(expand = "yes", side = "right", fill = "both")
+        Window.Config(text = "frame2")
 
-def get_frame1():    
-    # text1.window_create("end", window = list1)
-    # print basic.get_configuration_keys(frame1)    
+class Preference:
+    def __init__(self,loop=False):           
+        self.__main()
+        basic.mainloop(self.top, True)
+            
+    def __main(self):   
+        self.top = Widget.NewTop()
+        frame = Widget.Labelframe(self.top)
+        label = Widget.Label(frame)
+        entry = Widget.Entry(frame)
+        button1 = Widget.Button(frame)
+            
+        Window.widg = self.top
+        Window.Top("Preference settint")
+        
+        Window.widg = frame
+        Window.Config(text=u"设置偏好")
+        Window.Pack()
+                
+        Window.widg = label
+        Window.Config(text = u"文件路径:")
+        Window.Pack(side = "left")
+        
+        Window.widg = entry        
+        self.__entry_var = Window.ConfigVar("textvariable")
+        Window.Config(state=Tkconstants.DISABLED)
+        Window.Pack(side = "left")
+        
+        Window.widg = button1
+        command = basic.register_command(button1, self.__select_dir)
+        Window.Config(text = u"打开文件",command = command)        
+        Window.Pack(side = "left")
+            
+    def __select_dir(self):
+        pth = FileDilog.Askdirectory()
+        self.__entry_var.set(pth)
+        
+Main()
 
-    text1.insert(0.0, "switch to client automation")
-    Window.widg = text1
-    Window.Pack(expand = "yes", fill = "both", pady = 2, padx = "2m")
-    Window.Config(width = 88,height = 10)
-    Window.Bind('<Key>',set_selection)
-    Window.Bind('<Key-Return>',set_textformatter)
-    Window.Bind('<Key-Tab>',set_textkey)    
-    
-    Window.widg = text2
-    Window.Pack(expand = "yes", fill = "both", pady = 2, padx = "2m")
-    Window.Config(width = 88,height = 10)
-    
-    Window.widg = frame1
-    Window.Pack(expand = "yes", side = "left", fill = "both", pady = 2, padx = "2m")
-    Window.Config(text = "frame1")
-
-def get_frame2():
-    global g
-    Window.widg = x_scroll_1
-    Window.Config(orient = "horizontal", command= list1.xview)
-    Window.Pack(side = "bottom", fill = "x")
-    
-    Window.widg = y_scroll_1
-    Window.Config(orient = "vertical", command= list1.yview)
-    Window.Pack(side = "right", fill = "y")
-    
-    Window.widg = list1
-    Window.Config(selectmode = Tkconstants.SINGLE, xscrollcommand = x_scroll_1.set, yscrollcommand = y_scroll_1.set)
-    g["list1_var"] = Window.ConfigVar("listvariable")
-    Window.Pack(expand = "yes", fill = "both")
-    
-    Window.widg = frame2
-    Window.Pack(expand = "yes", side = "right", fill = "both")
-    Window.Config(text = "frame2")
-
-get_menu_bar()
-get_frame1()
-get_frame2()
-basic.mainloop(TOP, True)
 
 
 

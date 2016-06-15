@@ -21,7 +21,8 @@ UI and Web Http automation frame for python.
 import Tkinter,Tkconstants
 
 
-TOP = Tkinter.Tk()
+ROOT = Tkinter.Tk()
+
 
 import basic
 class Window:    
@@ -86,6 +87,9 @@ class Widget:
        "Menubutton", "Notebook",
        "Scale","Separator", "Sizegrip", "Style",       
     '''
+    @classmethod
+    def NewTop(cls):
+        return Tkinter.Toplevel()
     
     @classmethod
     def Panedwindow(cls,master,**kw):

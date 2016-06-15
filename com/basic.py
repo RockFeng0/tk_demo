@@ -73,6 +73,7 @@ def get_clipboard_value(obj):
         return
 
 # XXX grab current w/o window argument
+
 def get_widget_toplevel(obj):
     return obj.winfo_toplevel()
 
@@ -240,12 +241,12 @@ class FileDilog:
     @classmethod
     def Askopenfilename(cls,**options):
         "Ask for a filename to open"
-        tkFileDialog.askopenfilename(**options)
+        return tkFileDialog.askopenfilename(**options)
         
     @classmethod
     def Asksaveasfilename(cls,**options):
         "Ask for a filename to save as"
-        tkFileDialog.asksaveasfilename(**options)
+        return tkFileDialog.asksaveasfilename(**options)
 
     @classmethod
     def Askopenfilenames(cls,**options):
@@ -255,7 +256,12 @@ class FileDilog:
         returns a list of open file objects or an empty list if
         cancel selected
         """
-        tkFileDialog.askopenfilenames(**options)
+        return tkFileDialog.askopenfilenames(**options)
+    
+    @classmethod
+    def Askdirectory(cls,**options):
+        "Ask for a directory, and return the file name"
+        return tkFileDialog.askdirectory(**options)
         
         
 if __name__ == "__main__":
