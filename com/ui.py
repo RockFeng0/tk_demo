@@ -37,8 +37,8 @@ class Window:
         top.resizable(resizable_x,resizable_y) 
     
     @classmethod
-    def Pack(cls,side = Tkconstants.TOP, fill = Tkconstants.NONE, expand = Tkconstants.NO, pady = 0, padx = 0, **kw):
-        cls.widg.pack(side = side,fill = fill, expand = expand, pady = pady, padx = padx, **kw)
+    def Pack(cls,side = Tkconstants.TOP, fill = Tkconstants.NONE, expand = Tkconstants.NO, pady = 0, padx = 0, anchor = "center",**kw):
+        cls.widg.pack(side = side,fill = fill, expand = expand, pady = pady, padx = padx, anchor = anchor, **kw)
     
     @classmethod
     def Grid(cls,row=0,column=0,sticky="", **kw):

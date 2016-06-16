@@ -20,5 +20,6 @@ UI and Web Http automation frame for python.
 TITLE = u"AiTest自动化测试用例编写工具"
 
 MENUS = [
+         {u"执行":[u"运行当前"]}, 
          {u"导航":[u"接口测试"]},         
          ]

@@ -17,4 +17,12 @@ v1.0    Original version to use
 UI and Web Http automation frame for python.
 
 '''
-
+ad="sdf"
+def entrance():
+    global ad
+    print ad
+    ad = "ddd======"
+    
+if __name__ ==  "__main__":
+    entrance()
+    entrance()
