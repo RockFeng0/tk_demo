@@ -264,6 +264,26 @@ class FileDilog:
     def Askdirectory(cls,**options):
         "Ask for a directory, and return the file name"
         return tkFileDialog.askdirectory(**options)
+
+from tkFont import Font,NORMAL,BOLD,ROMAN,ITALIC
+class TkFont():
+    
+    def __init__(self, family = "Calibri", weight = NORMAL, slant = ROMAN, overstrike = 0, underline = 0, size = 12):
+        '''
+        family: 字符集
+        size: 字体大小
+        weight: "bold" for boldface, "normal" for regular weight.        
+        slant: "italic" for italic, "roman" for unslanted.        
+        underline: 1 for underlined text, 0 for normal.
+        overstrike: 1 for overstruck text, 0 for normal.
+        '''
+        self.font = Font(family = family, weight = weight, slant = slant, overstrike = overstrike, underline = underline, size = size)
+    
+    def get_actual_font_info(self):
+        return self.font.actual()
+    
+    def config(self,**kw):
+        self.font.config(**kw)
         
         
 if __name__ == "__main__":

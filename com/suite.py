@@ -18,8 +18,8 @@ UI and Web Http automation frame for python.
 
 '''
 import basic
-from ui import Widget,Window,Tkconstants,Tkinter
-from com.ui import Widget
+from com.ui import Widget,Window,Tkconstants,Tkinter
+from com.basic import TkFont 
 
 
 class Components:
@@ -27,7 +27,7 @@ class Components:
     @classmethod
     def GenerateMenu(cls,menubar_obj,title_tree,var,leaf=0):
         '''Sample usage:
-            from ui import ROOT
+            from com.ui import ROOT
             menubar = Widget.Menu(ROOT)
             
             Window.widg = ROOT
@@ -75,9 +75,9 @@ class Components:
         menu_node.insert_command(leaf_index,label=menu_leaf_name,command=command)
         
     @classmethod
-    def ListWithScrollbar(cls,master,side = "top", fill="both", expand="yes", **kw):
+    def ListWithScrollbar(cls,master,side = "top", fill="both", expand="yes", padx = "0.2c", **kw):
         '''Sample usage:
-            from ui import ROOT    
+            from com.ui import ROOT    
             frame1 = Widget.Labelframe(ROOT,text = "sssss")
             (l,x,y) = Components.ListWithScrollbar(frame1,side = "top", fill="both", expand="yes",padx = "0.5c")
             elems = ["Don't speculate, measure", "Waste not, want not", "Early to bed and early to rise makes a man healthy, wealthy, and wise", "Ask not what your country can do for you, ask what you can do for your country", "I shall return", "NOT", "A picture is worth a thousand words", "User interfaces are hard to build", "Thou shalt not steal", "A penny for your thoughts", "Fool me once, shame on you;  fool me twice, shame on me", "Every cloud has a silver lining", "Where there's smoke there's fire", "It takes one to know one", "Curiosity killed the cat", "Take this job and shove it", "Up a creek without a paddle", "I'm mad as hell and I'm not going to take it any more", "An apple a day keeps the doctor away", "Don't look a gift horse in the mouth", "Measure twice, cut once"]
@@ -103,21 +103,42 @@ class Components:
         master.columnconfigure(0,weight =1, minsize = 0)
         Window.Pack(side = side, fill=fill, expand = expand, **kw)
         return (lb,s_x,s_y)
-    
-def TextWithScrollbar(master):
-    tx = Widget.Text(master, width = 60, height = 24, font = )
-    s_x = Widget.Scrollbar(master)
-    s_y = Widget.Scrollbar(master)
-    
-    text $w.text -yscrollcommand "$w.scroll set" -setgrid true -width 60 -height 24 -font $font -wrap word
-    scrollbar $w.scroll -command "$w.text yview"
-    pack $w.scroll -side right -fill y
-    pack $w.text -expand yes -fill both
 
-
-    
-if __name__ == "__main__":
-    from ui import ROOT    
+    @classmethod
+    def TextWithScrollbar(cls, master,side = "top", fill="both", expand="yes", padx = "0.2c", **kw):
+        '''Sample usage:
+            from com.ui import ROOT    
+            frame1 = Widget.Labelframe(ROOT,text = "XXXX")
+            (t,x,y) = Components.TextWithScrollbar(frame1,side = "top", fill="both", expand="yes",padx = "2c")    
+            t.insert("end","0.ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\n")
+            t.insert("end","1.sdf\n")    
+            ROOT.mainloop()
+        '''
+        f = TkFont()
+        # wrap-->设置当一行文本的长度超过width选项设置的宽度时，是否换行; "none"不自动换行, "char"按字符自动换行, "word"按单词自动换行
+        tx = Widget.Text(master, width = 60, height = 24, font = f.font, wrap = "word", setgrid = 1)
+        s_x = Widget.Scrollbar(master,orient = Tkconstants.HORIZONTAL, command = tx.xview)
+        s_y = Widget.Scrollbar(master,orient = Tkconstants.VERTICAL, command = tx.yview)
         
-    ROOT.mainloop()
+        Window.widg = s_y
+        Window.Pack(side = "right", fill = "y")
+        
+        Window.widg = s_x
+        Window.Pack(side = "bottom", fill = "x")
+        
+        Window.widg = tx
+        Window.Config(xscrollcommand = s_x.set, yscrollcommand = s_y.set)
+        Window.Pack(side = "top",fill = "both", expand = "yes")
+        
+        Window.widg = master        
+        Window.Pack(side = side, fill=fill, expand = expand, **kw)
+        return (tx,s_x,s_y)
+    
+    @classmethod
+    def GetTextTags(cls,font,background, foreground, relief ):
+        pass
 
+if __name__ == "__main__":
+    from com.ui import ROOT    
+   
+    ROOT.mainloop()

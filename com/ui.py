@@ -38,6 +38,7 @@ class Window:
     
     @classmethod
     def Pack(cls,side = Tkconstants.TOP, fill = Tkconstants.NONE, expand = Tkconstants.NO, pady = 0, padx = 0, anchor = "center",**kw):
+        # padx,pady-表示外边距; ipadx,ipady-表示内边距; 如 padx = 20, pady="2c"; 默认单位为像素，可选单位为c（厘米）、m（毫米）、i（英寸）、p（打印机的点，即1/27英寸）用法为在值后加以上一个后缀既可。
         cls.widg.pack(side = side,fill = fill, expand = expand, pady = pady, padx = padx, anchor = anchor, **kw)
     
     @classmethod
