@@ -64,9 +64,46 @@ class Window:
         confs[var_key] = Tkinter.StringVar()
         basic.set_configuration(cls.widg,**confs)
         return confs.get(var_key)    
-        
+    
+    @classmethod
+    def TextTagConfig(cls,tag_name,font = None ,background = None, foreground = None, relief = None):
+        '''
+        Param:
+            font -->参数 顺序：  family size weight slant  ; 如 u"宋体    12", "Courier", "Courier 14", "Courier 14 normal roman"
+            background,foreground --> 颜色号, 可以用  英文/HEX/RGB
+            relief --> 参数值为:  flat raised  sunken
+        Sample usage:    
+            tx = Widget.Text(ROOT)
+            Window.widg = tx
+            Window.TextTagConfig("t_tag", u"宋体   12 normal italic", foreground="red")
+            Window.Pack()
+            tx.insert("end", u"你好呀啊啊 \n", "t_tag")
+            tx.insert("end", "osidfsdf\n", "t_tag")
+            tx.insert("end", tx.tag_names(), "t_tag")
+            ROOT.mainloop()
+        '''        
+        cls.widg.tag_config(tag_name,font = font ,background = background, foreground = foreground, relief = relief)
+#         all_tags = cls.widg.tag_names()
+#         print all_tags
+#         cls.widg.tag_delete(tag_name)
+                        
+      
     @classmethod  
     def Bind(cls, sequence=None, func=None, add=None, className=None):
+        '''Sample usage:
+            def printkey(event):
+                print('你按下了: ' + event.char)
+            entry = Widget.Entry(ROOT)
+            Window.widg = entry    
+            Window.Pack()
+            
+            entry1 = Widget.Entry(ROOT)
+            Window.widg = entry1    
+            Window.Pack()    
+            Window.Bind("<Key>", printkey,className="all")
+            
+            ROOT.mainloop()            
+        '''
         if className == None:
             return cls.widg.bind(sequence, func, add)
         elif className.lower() == "all":
@@ -139,7 +176,7 @@ class Widget:
     @classmethod
     def Text(cls,master=None, cnf={}, **kw):
         return Tkinter.Text(master, cnf, **kw)
-        
+         
     @classmethod
     def Listbox(cls,master=None, cnf={}, **kw):
         return Tkinter.Listbox(master, cnf, **kw)    
@@ -147,14 +184,6 @@ class Widget:
     @classmethod
     def Menu(cls,master=None, cnf={}, **kw):
         return Tkinter.Menu(master, cnf, **kw)
-    
-    
+
+if __name__ == "__main__":
         
-        
-    
-    
-    
-    
-    
-                
-            

@@ -18,10 +18,10 @@ UI and Web Http automation frame for python.
 
 '''
 import sc
-from com.ui import Window,Widget,ROOT,Tkconstants
 from com import basic
 from com.basic import MSG,FileDilog
-import testweb
+from com.ui import Window,Widget,ROOT,Tkconstants
+from com.suite import Components
 
 Window.widg = ROOT
 Window.Top(sc.TITLE, geometry="917x580+179+130", resizable_x=1,resizable_y=1)
@@ -39,14 +39,14 @@ class Menu:
         
     def __main(self):            
         self.menus = {}        
-        Widget.GenerateMenu(menubar, sc.MENUS, self.menus)
+        Components.GenerateMenu(menubar, sc.MENUS, self.menus)
         self.__set_menus_command()
         
     def __set_menus_command(self):
         node = self.menus.get(u"导航")
-        Widget.RegisterMenu(node, u"接口测试", self.__navigator, u"webservice")
+        Components.RegisterMenu(node, u"接口测试", self.__navigator, u"webservice")
         node = self.menus.get(u"执行")
-        Widget.RegisterMenu(node, u"运行当前", self.__runner, "current")
+        Components.RegisterMenu(node, u"运行当前", self.__runner, "current")
         
     def __navigator(self,*args):
         self.__clean_ui()
@@ -69,7 +69,7 @@ class AiTest:
         self.__main()
     
     def __main(self):
-        self.frame1         = Widget.Labelframe(ROOT)        
+        self.frame1         = Widget.Labelframe(ROOT)
         self.frame2         = Widget.Labelframe(ROOT)
         
         label_caseid        = Widget.Label(self.frame1)
@@ -199,10 +199,6 @@ class AiTest:
 
 
 Menu(loop = True)
- 
-        
-        
-        
-        
-        
-        
+
+
+

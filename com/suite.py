@@ -23,7 +23,7 @@ from com.basic import TkFont
 
 
 class Components:
-        
+    
     @classmethod
     def GenerateMenu(cls,menubar_obj,title_tree,var,leaf=0):
         '''Sample usage:
@@ -48,6 +48,7 @@ class Components:
             Components.RegisterMenu(node, u"运行当前", test, "webservice")
             node = result.get(u"呃呃")
             Components.RegisterMenu(node, u"得分", test, "current")
+            ROOT.mainloop()
         '''
         if isinstance(title_tree,list):
             for i in title_tree:
@@ -75,11 +76,16 @@ class Components:
         menu_node.insert_command(leaf_index,label=menu_leaf_name,command=command)
         
     @classmethod
-    def ListWithScrollbar(cls,master,side = "top", fill="both", expand="yes", padx = "0.2c", **kw):
+    def ListWithScrollbar(cls,master):
         '''Sample usage:
             from com.ui import ROOT    
             frame1 = Widget.Labelframe(ROOT,text = "sssss")
-            (l,x,y) = Components.ListWithScrollbar(frame1,side = "top", fill="both", expand="yes",padx = "0.5c")
+            frame1.rowconfigure(0,weight =1, minsize = 0)
+            frame1.columnconfigure(0,weight =1, minsize = 0)
+            Window.widg = frame1
+            Window.Pack(side = "top", fill="both", expand="yes", padx = "0.2c")
+                
+            (l,x,y) = Components.ListWithScrollbar(frame1)
             elems = ["Don't speculate, measure", "Waste not, want not", "Early to bed and early to rise makes a man healthy, wealthy, and wise", "Ask not what your country can do for you, ask what you can do for your country", "I shall return", "NOT", "A picture is worth a thousand words", "User interfaces are hard to build", "Thou shalt not steal", "A penny for your thoughts", "Fool me once, shame on you;  fool me twice, shame on me", "Every cloud has a silver lining", "Where there's smoke there's fire", "It takes one to know one", "Curiosity killed the cat", "Take this job and shove it", "Up a creek without a paddle", "I'm mad as hell and I'm not going to take it any more", "An apple a day keeps the doctor away", "Don't look a gift horse in the mouth", "Measure twice, cut once"]
             l.insert(0,*elems)
             ROOT.mainloop()
@@ -96,20 +102,19 @@ class Components:
         Window.Grid(row =0, column = 1, rowspan = 1, columnspan = 1, sticky = Tkconstants.NSEW)
         
         Window.widg = s_x
-        Window.Grid(row =1, column = 0, rowspan = 1, columnspan = 1, sticky = Tkconstants.NSEW)
+        Window.Grid(row =1, column = 0, rowspan = 1, columnspan = 1, sticky = Tkconstants.NSEW)       
         
-        Window.widg = master
-        master.rowconfigure(0,weight =1, minsize = 0)
-        master.columnconfigure(0,weight =1, minsize = 0)
-        Window.Pack(side = side, fill=fill, expand = expand, **kw)
         return (lb,s_x,s_y)
 
     @classmethod
-    def TextWithScrollbar(cls, master,side = "top", fill="both", expand="yes", padx = "0.2c", **kw):
+    def TextWithScrollbar(cls, master):
         '''Sample usage:
             from com.ui import ROOT    
             frame1 = Widget.Labelframe(ROOT,text = "XXXX")
-            (t,x,y) = Components.TextWithScrollbar(frame1,side = "top", fill="both", expand="yes",padx = "2c")    
+            Window.widg = frame1        
+            Window.Pack(side = "top", fill="both", expand="yes", padx = "0.2c")
+            
+            (t,x,y) = Components.TextWithScrollbar(frame1)    
             t.insert("end","0.ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\n")
             t.insert("end","1.sdf\n")    
             ROOT.mainloop()
@@ -128,17 +133,56 @@ class Components:
         
         Window.widg = tx
         Window.Config(xscrollcommand = s_x.set, yscrollcommand = s_y.set)
-        Window.Pack(side = "top",fill = "both", expand = "yes")
+        Window.Pack(side = "top",fill = "both", expand = "yes")       
         
-        Window.widg = master        
-        Window.Pack(side = side, fill=fill, expand = expand, **kw)
         return (tx,s_x,s_y)
     
     @classmethod
-    def GetTextTags(cls,font,background, foreground, relief ):
-        pass
-
+    def LabelWithEntryAndButton(cls, master, grid_tree):
+        '''Sample usage
+            from com.ui import ROOT    
+            frame1 = Widget.Labelframe(ROOT,text = "YYYY")
+            Window.widg = frame1        
+            Window.Pack(side = "top", fill="both", expand="yes", padx = "0.2c")
+            
+            grid_tree = [
+                        [(u"用户名:", u"登录")],
+                        [(u"密码:", ""),(u"验证码:", "")], 
+                    ]
+            widgets = Components.LabelWithEntryAndButton(frame1, grid_tree)
+            widgets[0][1].insert("end","hi handsome boy.")    
+            ROOT.mainloop()
+        '''
+        result = []
+        rows = len(grid_tree)
+        for row in range(rows):
+            result.append([])
+            column = -1
+            
+            groups = grid_tree[row]
+            for lable_name,button_name in groups:
+                column = column + 1
+                label           = Widget.Label(master, text = lable_name)
+                result[row].append(label)
+                Window.widg     = label
+                Window.Grid(row, column, "w")
+                
+                column = column + 1
+                entry           = Widget.Entry(master)
+                result[row].append(entry)
+                Window.widg     = entry
+                Window.Grid(row, column, "ew")
+                
+                if button_name:
+                    column = column + 1
+                    button      = Widget.Button(master, text = button_name)
+                    result[row].append(button)
+                    Window.widg = button
+                    Window.Grid(row, column, "e")
+        return result 
+    
 if __name__ == "__main__":
-    from com.ui import ROOT    
-   
+    from com.ui import ROOT
+      
     ROOT.mainloop()
+    
