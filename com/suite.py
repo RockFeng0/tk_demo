@@ -1,32 +1,16 @@
+#! python2
 # -*- encoding: utf-8 -*-
-'''
-Current module: com.suite
 
-Rough version history:
-v1.0    Original version to use
-
-********************************************************************
-    @AUTHOR:  Administrator-Bruce Luo(罗科峰)
-    MAIL:    lkf20031988@163.com
-    RCS:      com.suite,v 1.0 2016年6月22日
-    FROM:   2016年6月22日
-********************************************************************
-
-======================================================================
-
-UI and Web Http automation frame for python.
-
-'''
 import basic
-from com.ui import Widget,Window,Tkconstants,Tkinter
+from com.ui import Widget, Window, Tkconstants, Tkinter
 from com.basic import TkFont 
 
 
-class Components:
+class Components(object):
     
     @classmethod
-    def GenerateMenu(cls,menubar_obj,title_tree,var,leaf=0):
-        '''Sample usage:
+    def GenerateMenu(cls, menubar_obj, title_tree, var, leaf=0):
+        """Sample usage:
             from com.ui import ROOT
             menubar = Widget.Menu(ROOT)
             
@@ -49,16 +33,16 @@ class Components:
             node = result.get(u"呃呃")
             Components.RegisterMenu(node, u"得分", test, "current")
             ROOT.mainloop()
-        '''
+        """
         if isinstance(title_tree,list):
             for i in title_tree:
-                cls.GenerateMenu(menubar_obj,i,var,leaf=1);#列表格式，里边放是叶子节点,设置leaf=1
+                cls.GenerateMenu(menubar_obj, i, var, leaf=1)  # 列表格式，里边放是叶子节点,设置leaf=1
                 
         elif isinstance(title_tree,dict):
             # 字典格式，里边的子节点，不是叶子节点，设置leaf=0
             for k,v in title_tree.items():             
-                var[k] = Tkinter.Menu();# 记录每一个Menu子节点的实例对象
-                menubar_obj.add("cascade",label=k, menu = var[k]);# cascade允许 menu参数，建立 Menu item                    
+                var[k] = Tkinter.Menu()  # 记录每一个Menu子节点的实例对象
+                menubar_obj.add("cascade",label=k, menu = var[k])  # cascade允许 menu参数，建立 Menu item                    
                 cls.GenerateMenu(var[k],v,var,leaf=0)
         else:
             # 叶子节点
@@ -66,7 +50,7 @@ class Components:
                 var[title_tree] = Tkinter.Menu()
                 menubar_obj.add("cascade",label=title_tree, menu = var[title_tree])
             else:
-                menubar_obj.add("command",label=title_tree);# command没有menu参数,建立叶子节点      
+                menubar_obj.add("command",label=title_tree)  # command没有menu参数,建立叶子节点      
                 
     @classmethod
     def RegisterMenu(cls,menu_node,menu_leaf_name,function,*func_args):
@@ -77,7 +61,7 @@ class Components:
         
     @classmethod
     def ListWithScrollbar(cls,master):
-        '''Sample usage:
+        """Sample usage:
             from com.ui import ROOT    
             frame1 = Widget.Labelframe(ROOT,text = "sssss")
             frame1.rowconfigure(0,weight =1, minsize = 0)
@@ -89,7 +73,7 @@ class Components:
             elems = ["Don't speculate, measure", "Waste not, want not", "Early to bed and early to rise makes a man healthy, wealthy, and wise", "Ask not what your country can do for you, ask what you can do for your country", "I shall return", "NOT", "A picture is worth a thousand words", "User interfaces are hard to build", "Thou shalt not steal", "A penny for your thoughts", "Fool me once, shame on you;  fool me twice, shame on me", "Every cloud has a silver lining", "Where there's smoke there's fire", "It takes one to know one", "Curiosity killed the cat", "Take this job and shove it", "Up a creek without a paddle", "I'm mad as hell and I'm not going to take it any more", "An apple a day keeps the doctor away", "Don't look a gift horse in the mouth", "Measure twice, cut once"]
             l.insert(0,*elems)
             ROOT.mainloop()
-        '''
+        """
         lb = Widget.Listbox(master, width = 20, height = 10, setgrid = 1)
         s_x = Widget.Scrollbar(master,orient = Tkconstants.HORIZONTAL, command = lb.xview)
         s_y = Widget.Scrollbar(master,orient = Tkconstants.VERTICAL, command = lb.yview)
@@ -108,7 +92,7 @@ class Components:
 
     @classmethod
     def TextWithScrollbar(cls, master):
-        '''Sample usage:
+        """Sample usage:
             from com.ui import ROOT    
             frame1 = Widget.Labelframe(ROOT,text = "XXXX")
             Window.widg = frame1        
@@ -118,7 +102,7 @@ class Components:
             t.insert("end","0.ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\n")
             t.insert("end","1.sdf\n")    
             ROOT.mainloop()
-        '''
+        """
         f = TkFont()
         # wrap-->设置当一行文本的长度超过width选项设置的宽度时，是否换行; "none"不自动换行, "char"按字符自动换行, "word"按单词自动换行
         tx = Widget.Text(master, width = 60, height = 24, font = f.font, wrap = "word", setgrid = 1)
@@ -139,7 +123,7 @@ class Components:
     
     @classmethod
     def LabelWithEntryAndButton(cls, master, grid_tree):
-        '''Sample usage
+        """Sample usage
             from com.ui import ROOT    
             frame1 = Widget.Labelframe(ROOT,text = "YYYY")
             Window.widg = frame1        
@@ -152,7 +136,7 @@ class Components:
             widgets = Components.LabelWithEntryAndButton(frame1, grid_tree)
             widgets[0][1].insert("end","hi handsome boy.")    
             ROOT.mainloop()
-        '''
+        """
         result = []
         rows = len(grid_tree)
         for row in range(rows):
@@ -180,9 +164,8 @@ class Components:
                     Window.widg = button
                     Window.Grid(row, column, "e")
         return result 
-    
+
+
 if __name__ == "__main__":
     from com.ui import ROOT
-      
     ROOT.mainloop()
-    

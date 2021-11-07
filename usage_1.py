@@ -1,30 +1,14 @@
+#! python2
 # -*- encoding: utf-8 -*-
-'''
-Current module: ui.demo
-
-Rough version history:
-v1.0    Original version to use
-
-********************************************************************
-    @AUTHOR:  Administrator-Bruce Luo(罗科峰)
-    MAIL:    lkf20031988@163.com
-    RCS:      ui.demo,v 1.0 2016年6月8日
-    FROM:   2016年6月8日
-********************************************************************
-
-======================================================================
-
-UI and Web Http automation frame for python.
-
-'''
 
 from com import basic
-from com.basic import MSG,FileDilog
-from com.ui import Window,Widget,Tkconstants,ROOT
+from com.suite import Components
+from com.basic import MSG, FileDilog
+from com.ui import Window, Widget, Tkconstants, ROOT
 
 g = {
-     "list1_var":None,
-     "tmp_key":[
+     "list1_var": None,
+     "tmp_key": [
             "INTF_CipherDES",
             "INTF_Contain",
             "INTF_DBExist",
@@ -168,12 +152,12 @@ g = {
             "WEB_verify_url",
             "WEB_wait",
             ],
-     "tmp":"",
+     "tmp": "",
      }
 
 
 Window.widg = ROOT
-Window.Top("Demo tk",resizable_x = 1, resizable_y = 1)
+Window.Top("Demo tk", resizable_x=1, resizable_y=1)
 
 frame1 = Widget.Labelframe(ROOT)
 frame2 = Widget.Labelframe(ROOT)
@@ -188,23 +172,24 @@ y_scroll_1 = Widget.Scrollbar(frame2)
    
 
 menu0 = Widget.Menu(ROOT)
-ROOT.config(menu = menu0)
+ROOT.config(menu=menu0)
 ROOT.option_add("*Menu.tearOff", 0)
 menu_objs = {}
+        
         
 def set_selection(event):
     global g
     
-    if event.char==".":
+    if event.char == ".":
         g["tmp"] = ""
         value = " ".join(g.get("tmp_key"))
         g["list1_var"].set(value)
         return    
     
-    all_classify_key = list1.get("0","end")
+    all_classify_key = list1.get("0", "end")
     all_key = []  
     for k in all_classify_key:
-        all_key.append(k.split("_",1)[1])
+        all_key.append(k.split("_", 1)[1])
     
     g["tmp"] = g["tmp"] + event.char    
     cur = len(g["tmp"])
@@ -224,26 +209,28 @@ def set_selection(event):
     if indx:
         list1.delete("0", "end")
         g["list1_var"].set(" ".join(result))
-        list1.selection_clear("0","end")    
+        list1.selection_clear("0", "end")    
         list1.selection_set(0)
         list1.see(0)
 
+
 def set_textformatter(event):    
     text2.delete("0.0", "end")
-    tmp = text1.get("0.0","end").split("\n")
+    tmp = text1.get("0.0", "end").split("\n")
     for i in range(len(tmp)):
-        text2.insert("end","%s.%s\n" %(i+1, tmp[i]))
+        text2.insert("end", "%s.%s\n" % (i+1, tmp[i]))
     
   
 def set_textkey(event):
     if list1.curselection():
         indx = list1.curselection()[0]
-        value = list1.get(indx).split("_",1)[1]
+        value = list1.get(indx).split("_", 1)[1]
         filler = value[len(g["tmp"]):]        
-        text1.insert("end",filler)
-    
-####  UI construction
-class Main():
+        text1.insert("end", filler)
+
+
+# UI construction
+class Main(object):
     def __init__(self):
         self.__main()        
         basic.mainloop(ROOT, True)
@@ -252,42 +239,42 @@ class Main():
         self.__get_menu_bar()
         self.__get_frame1()
         self.__get_frame2()
-        
     
-    def __get_menu_bar(self):    
+    def __get_menu_bar(self):
         menu_tree = [
-                {u"文件": [u"打开",u"偏好设置"]},
-                {u"运行": [u"停止",u"选中运行",u"全部运行"]},
-                {u"报告": [u"查看报告",u"邮件发送报告"]},
+                {u"文件": [u"打开", u"偏好设置"]},
+                {u"运行": [u"停止", u"选中运行", u"全部运行"]},
+                {u"报告": [u"查看报告", u"邮件发送报告"]},
                 {u"关于": u"版本信息"}
             ]
-        Widget.GenerateMenu(menu0, menu_tree, menu_objs)
+        Components.GenerateMenu(menu0, menu_tree, menu_objs)
         
         def test_function(*args):
-            msg="oh,you are too handsome.\n"
+            msg = u"哈喽，Tkinter.\n"
             for i in args:
-                msg = msg + " " + str(i)
+                print i, type(i)
+                msg = msg + " " + i
             MSG.Showinfo("Hi My Demo", msg)
             
         def pop_ui(*args):
             Preference()
         
         node = menu_objs.get(u"关于")
-        Widget.RegisterMenu(node, u"版本信息", test_function, u"It's a demo usage of my Tkinter packages.\n -Bruce Luo(罗科峰)")
+        Components.RegisterMenu(node, u"版本信息", test_function, u"clicked 关于")
         
         node = menu_objs.get(u"运行")
-        Widget.RegisterMenu(node, u"停止", test_function, u"clicked 停止")
-        Widget.RegisterMenu(node, u"选中运行", test_function, u"clicked 选中运行")
-        Widget.RegisterMenu(node, u"全部运行", test_function, u"clicked 全部运行")
+        Components.RegisterMenu(node, u"停止", test_function, u"clicked 停止")
+        Components.RegisterMenu(node, u"选中运行", test_function, u"clicked 选中运行")
+        Components.RegisterMenu(node, u"全部运行", test_function, u"clicked 全部运行")
         
         node = menu_objs.get(u"报告")
-        Widget.RegisterMenu(node, u"查看报告", test_function, u"clicked 查看报告")
-        Widget.RegisterMenu(node, u"邮件发送报告", test_function, u"clicked 邮件发送报告")
+        Components.RegisterMenu(node, u"查看报告", test_function, u"clicked 查看报告")
+        Components.RegisterMenu(node, u"邮件发送报告", test_function, u"clicked 邮件发送报告")
         
         node = menu_objs.get(u"文件")
-        Widget.RegisterMenu(node, u"打开", test_function, u"clicked 打开")
-        Widget.RegisterMenu(node, u"偏好设置", pop_ui)
-        
+        Components.RegisterMenu(node, u"打开", test_function, u"clicked 打开")
+        Components.RegisterMenu(node, u"偏好设置", pop_ui)
+
     def __get_frame1(self):    
         # text1.window_create("end", window = list1)
         # print basic.get_configuration_keys(frame1)    
@@ -307,7 +294,7 @@ class Main():
         Window.widg = frame1
         Window.Pack(expand = "yes", side = "left", fill = "both", pady = 2, padx = "2m")
         Window.Config(text = "frame1")
-    
+
     def __get_frame2(self):
         global g
         Window.widg = x_scroll_1
@@ -326,6 +313,7 @@ class Main():
         Window.widg = frame2
         Window.Pack(expand = "yes", side = "right", fill = "both")
         Window.Config(text = "frame2")
+
 
 class Preference:
     def __init__(self,loop=False):           
@@ -363,10 +351,7 @@ class Preference:
     def __select_dir(self):
         pth = FileDilog.Askdirectory()
         self.__entry_var.set(pth)
-        
-Main()
 
 
-
-
-
+if __name__ == '__main__':
+    Main()
